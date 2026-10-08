@@ -1,0 +1,130 @@
+NECA WEBSITE KNOWLEDGE BASE
+Compiled: 2026-10-07 (Africa/Lagos)
+Source type: paraphrased summaries of NECA and NECA ICT Academy public webpages.
+Coverage: organisation information, membership, technical skills development, ICT Academy courses, programme process, and published contacts.
+This is a dated website snapshot. Course availability, contact details, and application arrangements may change after publication.
+
+======================================================================
+SECTION 1: NECA ORGANISATION, HISTORY AND SERVICES
+Source URL: https://neca.org.ng/who-we-are/
+Source title: Who We Are
+Retrieved: 2026-10-07
+
+NECA stands for Nigeria Employers' Consultative Association. It was established in 1957 as a forum through which government could consult private-sector employers about economic, social and labour policies. NECA represents employers in Nigeria's organised private sector.
+
+The association connects employers with government, labour organisations, communities and other institutions to support a productive business environment. NECA describes itself as a professional employers' organisation rather than a trade union.
+
+Its listed services include advisory support, capacity building, a business help desk, labour and human-resource services, enterprise development, representation on legal and tax matters, and survey information.
+
+Ordinary members are individual businesses or organisations employing at least five workers. Affiliate membership covers sectoral employers' associations, industrial groups and trade associations.
+
+======================================================================
+SECTION 2: NECA MEMBERSHIP REQUIREMENTS
+Source URL: https://neca.org.ng/membership-requirements/
+Source title: Membership Requirements
+Retrieved: 2026-10-07
+
+An enterprise applying for NECA membership must operate legally in Nigeria and employ at least five workers.
+
+Applications require a proposer and a seconder who are NECA members with paid-up subscriptions.
+
+The employer applies to the Director-General using the prescribed application form. The application is accompanied by payment of the entrance fee and the annual subscription for the relevant year. The form can be completed through NECA's website or downloaded.
+
+The requirements page does not state the current fee amounts. The membership requirements for employers are separate from admission requirements for ICT Academy students.
+
+======================================================================
+SECTION 3: NECA MEMBERSHIP BENEFITS
+Source URL: https://neca.org.ng/benefits-of-membership/
+Source title: Benefits of Membership
+Retrieved: 2026-10-07
+
+NECA lists representation of business interests when dealing with government, host communities and trade unions as a membership benefit.
+
+Members can access comparative information on employment terms and receive advice about issues such as taxation, environmental matters, social security, and occupational health and safety.
+
+Other listed benefits include opportunities to contribute to policy discussions, subsidised training and consultancy, and business connections.
+
+Enterprise-development offerings cover productivity improvement, starting a business, improving an existing business, managing a firm, and turning around a struggling business.
+
+======================================================================
+SECTION 4: ITF-NECA TECHNICAL SKILLS DEVELOPMENT PROJECT
+Source URL: https://neca.org.ng/technical-skills-development-project/
+Source title: Technical Skills Development Project (TSDP)
+Retrieved: 2026-10-07
+
+TSDP is the Technical Skills Development Project, a joint initiative of the Industrial Training Fund (ITF) and NECA. Its implementation began on 31 March 2009.
+
+The project develops practical occupational knowledge, skills and attitudes for employment and entrepreneurship. It promotes technical and vocational training through collaboration between public and private organisations.
+
+The published training model combines classroom instruction and practical exercises, industrial attachment, and entrepreneurship development.
+
+Training takes place through participating organisations, including NECA member companies, ITF training centres and selected institutions. Training durations vary by centre and trade; the page gives a general range of three to eighteen months.
+
+Listed areas include information and communication technology, automation, electrical maintenance, mechatronics, welding, plumbing, solar installation, and photography and videography.
+
+The page describes selection exercises involving aptitude tests and oral interviews, with medical examinations in some cases. These are general TSDP arrangements, not a verified admission procedure for every individual Academy course.
+
+======================================================================
+SECTION 5: NECA ICT ACADEMY OVERVIEW
+Source URL: https://www.necaictacademy.org/
+Source title: NECA ICT Academy
+Retrieved: 2026-10-07
+
+NECA ICT Academy offers practical digital-skills training supported by instructors and mentors. Its stated mission centres on helping people acquire ICT skills, narrowing the digital-skills gap and improving employment opportunities.
+
+Its vision is to become a leading technology-skills development centre whose graduates can compete internationally.
+
+The Academy website describes hands-on learning, mentorship and career support. This description does not establish a guarantee that every learner will obtain employment.
+
+======================================================================
+SECTION 6: PUBLISHED ICT ACADEMY COURSES
+Source URL: https://www.necaictacademy.org/courses
+Source title: Course Overview
+Retrieved: 2026-10-07
+
+The retrieved course catalogue lists:
+
+1. 3D Animation Training: skills in modelling and visual storytelling, with applications in media, entertainment, advertising, architecture and digital content.
+
+2. Advanced Artificial Intelligence: practical use of AI tools to support productivity, decision-making, and career or business development.
+
+3. Advanced Artificial Intelligence and 3D Animation: a combined programme covering machine learning, deep learning, intelligent systems and professional animation techniques. Its listing specifies four months, intermediate level and hybrid delivery.
+
+All three retrieved course listings display an applications-closed label. This is a snapshot of the retrieved listing, not an assurance about future enrolment status.
+
+The separate AI and animation listings display a duration value of 16 without a clearly stated unit in the retrieved text. No duration unit is inferred here.
+
+======================================================================
+SECTION 7: ICT ACADEMY PROGRAMME PROCESS
+Source URL: https://www.necaictacademy.org/programprocess
+Source title: Program Process
+Retrieved: 2026-10-07
+
+The Academy describes four stages: selecting a suitable course, registering online, learning through lessons and practical projects with mentorship, and completing the course with certification and career support.
+
+Its programme-process page mentions software development, cybersecurity, UI/UX design, data analytics and digital marketing as areas of interest. These references do not independently confirm that all those courses currently accept applications.
+
+The page describes certification after successful course completion, career guidance, job-placement support and networking. It does not establish guaranteed admission, automatic certification or a guaranteed job.
+
+======================================================================
+SECTION 8: ICT ACADEMY PUBLISHED CONTACTS AND BRANCHES
+Source URL: https://www.necaictacademy.org/contact
+Source title: Contact Us
+Retrieved: 2026-10-07
+
+General contact email: contact@necaictacademy.org
+General contact telephone: +234 809 938 7853
+
+Lagos branch:
+NECA House, Plot A2, Hakeem Balogun Street, Central Business District, Alausa, Ikeja, Lagos.
+Published branch telephone numbers: 08160600305 and 08131191568.
+
+Abuja branch:
+8th Floor, Unity Bank House, Plot 785, Herbert Macaulay Way, Central Business District, Abuja.
+Published branch telephone numbers: 07032760322 and 07089116429.
+
+The contact page provides a form for enquiries. The Academy contact channels can be used to confirm course schedules, application arrangements and enrolment availability.
+
+======================================================================
+END OF WEBSITE KNOWLEDGE SNAPSHOT
+
