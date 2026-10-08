@@ -3,7 +3,10 @@ uvicorn
 python-multipart
 groq
 supabase
-sentence-transformers
+onnxruntime>=1.20,<2
+tokenizers>=0.21,<1
+huggingface-hub>=0.27,<2
+numpy>=1.26,<3
 python-dotenv
 pypdf
 python-docx

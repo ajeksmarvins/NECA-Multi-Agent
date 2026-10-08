@@ -4,7 +4,6 @@ from functools import lru_cache
 from pathlib import Path
 
 from dotenv import load_dotenv
-from sentence_transformers import SentenceTransformer
 from supabase import create_client
 
 
@@ -25,11 +24,103 @@ def get_supabase():
     return create_client(url, key)
 
 
-@lru_cache(maxsize=1)
-def get_embedding_model():
-    print("Loading embedding model...", flush=True)
-    return SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+# Keep the original MiniLM model and pooling, using its quantized ONNX graph.
+# No PyTorch or sentence-transformers package is loaded by this backend.
+_MODEL_LOCK = __import__('threading').Lock()
+_MODEL_INSTANCE = None
+MODEL_REPOSITORY = "sentence-transformers/all-MiniLM-L6-v2"
+MODEL_REVISION = "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+MODEL_GRAPH = "onnx/model_quint8_avx2.onnx"
+MODEL_DIRECTORY = BASE_DIR / "model_cache"
 
+
+def prepare_embedding_files():
+    """Download only the tokenizer and quantized graph during the build."""
+    os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
+    from huggingface_hub import hf_hub_download
+
+    MODEL_DIRECTORY.mkdir(parents=True, exist_ok=True)
+    for filename in ("tokenizer.json", MODEL_GRAPH):
+        target = MODEL_DIRECTORY / filename
+        if not target.is_file():
+            hf_hub_download(
+                repo_id=MODEL_REPOSITORY,
+                revision=MODEL_REVISION,
+                filename=filename,
+                local_dir=str(MODEL_DIRECTORY),
+            )
+    return MODEL_DIRECTORY
+
+
+class LightweightEmbeddingModel:
+    """An encode-compatible MiniLM adapter with bounded inference memory."""
+
+    def __init__(self):
+        import threading
+        import onnxruntime as ort
+        from tokenizers import Tokenizer
+
+        folder = prepare_embedding_files()
+        self._lock = threading.Lock()
+        self._tokenizer = Tokenizer.from_file(str(folder / "tokenizer.json"))
+        self._tokenizer.enable_truncation(max_length=256)
+        self._tokenizer.enable_padding(
+            pad_id=self._tokenizer.token_to_id("[PAD]"), pad_token="[PAD]"
+        )
+        options = ort.SessionOptions()
+        options.intra_op_num_threads = 1
+        options.inter_op_num_threads = 1
+        options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
+        options.enable_cpu_mem_arena = False
+        options.enable_mem_pattern = False
+        options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_BASIC
+        self._session = ort.InferenceSession(
+            str(folder / MODEL_GRAPH), sess_options=options,
+            providers=["CPUExecutionProvider"],
+        )
+        self._inputs = {entry.name for entry in self._session.get_inputs()}
+
+    def encode(self, sentences, normalize_embeddings=True):
+        import numpy as np
+
+        single = isinstance(sentences, str)
+        texts = [sentences] if single else list(sentences)
+        if not all(isinstance(text, str) for text in texts):
+            raise ValueError("Embedding inputs must be text.")
+        vectors = []
+        # Serialize tokenizer and inference: concurrent chats share one model.
+        with self._lock:
+            for offset in range(0, len(texts), 2):
+                encoded = self._tokenizer.encode_batch(texts[offset:offset + 2])
+                tensors = {
+                    "input_ids": np.asarray([item.ids for item in encoded], dtype=np.int64),
+                    "attention_mask": np.asarray([item.attention_mask for item in encoded], dtype=np.int64),
+                    "token_type_ids": np.asarray([item.type_ids for item in encoded], dtype=np.int64),
+                }
+                outputs = self._session.run(
+                    None, {name: tensors[name] for name in self._inputs}
+                )
+                hidden = outputs[0]
+                if hidden.ndim != 3 or hidden.shape[-1] != 384:
+                    raise ValueError("Unexpected MiniLM token embedding shape.")
+                mask = tensors["attention_mask"][..., None].astype(np.float32)
+                pooled = (hidden * mask).sum(axis=1) / np.maximum(mask.sum(axis=1), 1e-9)
+                if normalize_embeddings:
+                    pooled /= np.maximum(np.linalg.norm(pooled, axis=1, keepdims=True), 1e-12)
+                if not np.isfinite(pooled).all():
+                    raise ValueError("The embedding model returned invalid values.")
+                vectors.extend(pooled)
+        result = np.asarray(vectors, dtype=np.float32).reshape(-1, 384)
+        return result[0] if single else result
+
+
+def get_embedding_model():
+    global _MODEL_INSTANCE
+    with _MODEL_LOCK:
+        if _MODEL_INSTANCE is None:
+            print("Loading lightweight MiniLM embedding model...", flush=True)
+            _MODEL_INSTANCE = LightweightEmbeddingModel()
+    return _MODEL_INSTANCE
 
 def chunk_text(text, chunk_size=500, overlap=50):
     if not 0 <= overlap < chunk_size:
@@ -90,7 +181,6 @@ def read_website_sections():
 def ingest_website_knowledge():
     sections = read_website_sections()
     supabase = get_supabase()
-    model = get_embedding_model()
     pending = []
     skipped = 0
 
@@ -138,7 +228,7 @@ def ingest_website_knowledge():
     if pending:
         print(f"Creating embeddings for {len(pending)} chunks...", flush=True)
 
-        embeddings = model.encode(
+        embeddings = get_embedding_model().encode(
             [row["content"] for row in pending],
             normalize_embeddings=True,
         ).tolist()
