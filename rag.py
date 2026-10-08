@@ -278,6 +278,46 @@ def rag_search(question, top_k=5, match_threshold=0.3):
     return result.data or []
 
 
+
+def list_stored_sources():
+    """Read source metadata in small batches without loading embeddings."""
+    client = get_supabase()
+    grouped = {}
+    offset = 0
+    batch_size = 500
+    # Bound the work on the free server; never return a silently partial list.
+    while True:
+        rows = (client.table("documents")
+                .select("id,title,source")
+                .order("id")
+                .range(offset, offset + batch_size - 1)
+                .execute()).data or []
+        for row in rows:
+            source = row.get("source") or ""
+            title = row.get("title") or source or "Untitled source"
+            identity = source or title
+            if identity not in grouped:
+                website = source.startswith(("https://", "http://"))
+                grouped[identity] = {
+                    "title": title,
+                    "source": source,
+                    "type": "website" if website else "document",
+                    "url": source if website else None,
+                    "chunks": 0,
+                }
+            grouped[identity]["chunks"] += 1
+        if len(rows) < batch_size:
+            break
+        offset += batch_size
+        if offset >= 50000:
+            raise ValueError("The source catalogue exceeds the listing limit.")
+    sources = sorted(grouped.values(), key=lambda item: (item["type"], item["title"].casefold(), item["source"]))
+    return {
+        "sources": sources,
+        "total_sources": len(sources),
+        "total_chunks": sum(item["chunks"] for item in sources),
+    }
+
 if __name__ == "__main__":
     try:
         print("Loading NECA website knowledge into Supabase...", flush=True)

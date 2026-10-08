@@ -20,7 +20,7 @@ from starlette.concurrency import run_in_threadpool
 from agents import AGENTS, handle_question
 from guardrails import GuardrailError, safe_error
 from ingestion import ALLOWED_EXTENSIONS, MAX_FILE_BYTES, ingest_document
-from rag import ingest_website_knowledge
+from rag import ingest_website_knowledge, list_stored_sources
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -172,6 +172,33 @@ def health():
 @app.get("/agents")
 def list_agents():
     return [{"name": agent.name, "role": agent.role} for agent in AGENTS.values()]
+
+
+
+class StoredSource(BaseModel):
+    title: str
+    source: str
+    type: str
+    url: str | None = None
+    chunks: int
+
+
+class StoredSourcesResponse(BaseModel):
+    sources: list[StoredSource]
+    total_sources: int
+    total_chunks: int
+
+
+@app.get("/sources", response_model=StoredSourcesResponse)
+def stored_sources():
+    try:
+        return list_stored_sources()
+    except Exception as error:
+        log_error("Source listing", error)
+        raise HTTPException(
+            status_code=502,
+            detail="Stored sources could not be listed. Please try again.",
+        ) from error
 
 
 @app.post("/chat", response_model=ChatResponse)
